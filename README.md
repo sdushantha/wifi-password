@@ -2,7 +2,9 @@
 wifi-password
 </h1>
 <p align="center">
-Generate a QR code of your WiFi allowing other devices to easily connect without having to type the password
+Generate a QR code of your WiFi allowing other devices to easily connect without having to type the password.
+<br>
+Works on macOS and Linux and Windows
 <img src="images/demo.gif" align="center">
 </p>
 

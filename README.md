@@ -2,9 +2,9 @@
 wifi-password
 </h1>
 <p align="center">
-Generate a QR code of your WiFi allowing other devices to easily connect without having to type the password.
+Quickly fetch your WiFi password and if needed, generate a QR code of your WiFi to allow phones to easily connect.
 <br>
-Works on macOS and Linux and Windows
+Works on macOS and Linux and Windows.
 <img src="images/demo.gif" align="center">
 </p>
 
@@ -33,3 +33,7 @@ optional arguments:
   --ssid SSID, -s SSID  Specify a SSID that you have previously connected to
   --version             Show version number
 ```
+
+## Reference
+- This project is a improvement of [wifi-password](https://github.com/rauchg/wifi-password) created by [@rauchg](https://github.com/rauchg), where I have added support for mutliple platforms and have added the feature for generating QR codes.
+- [wifiPassword](https://github.com/ankitjain28may/wifiPassword) created by [@ankitjain28may](https://github.com/ankitjain28may) was frequently used as referece throughout the development of this project.

@@ -35,12 +35,12 @@ $ python3 setup.py install
 ## Usage
 ```console
 $ wifi-password
-usage: wifi-password [options]
+usage: wifi_password [options]
 
 optional arguments:
   -h, --help            show this help message and exit
-  --qrcode, -q          Don't generate a QR code
-  --image, -i           Create QR code as image instead of showing it on the terminal
+  --qrcode, -q          Generate a QR code
+  --image, -i           Create the QR code as image instead of showing it on the terminal (must be useed along with --qrcode)
   --ssid SSID, -s SSID  Specify a SSID that you have previously connected to
   --version             Show version number
 ```
@@ -48,3 +48,4 @@ optional arguments:
 ## Reference
 - This project is an improvement of [wifi-password](https://github.com/rauchg/wifi-password) created by [@rauchg](https://github.com/rauchg), where I have added support for multiple platforms and have added the feature for generating QR codes.
 - [wifiPassword](https://github.com/ankitjain28may/wifiPassword) created by [@ankitjain28may](https://github.com/ankitjain28may) was frequently used as reference throughout the development of this project.
+

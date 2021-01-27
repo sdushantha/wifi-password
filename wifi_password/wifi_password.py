@@ -33,7 +33,7 @@ def get_ssid():
         ssid = ssid.replace("\n", "")
 
     elif sys.platform == "linux":
-        if which("iwgetid") is not None:
+        if which("iwgetid") is None:
             print_error("Can't find the 'iwgetid' command")
         
         ssid = run_command("iwgetid -r")
@@ -56,8 +56,9 @@ def get_password(ssid):
         if os.geteuid() != 0:
             print_error(f"You need to run '{sys.argv[0]}' as root")
 
-        password = run_command(f"cat /etc/NetworkManager/system-connections/{ssid} | grep psk=")
+        password = run_command(f"cat /etc/NetworkManager/system-connections/{ssid}.nmconnection | grep psk=")
         password = password.replace("\n", "")
+        password = password[4:]
 
     elif sys.platform == "win32":
         password = run_command(f"netsh wlan show profile name=\"{ssid}\" key=clear | findstr Key").replace("\r", "")

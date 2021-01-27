@@ -34,7 +34,7 @@ def get_ssid():
 
     elif sys.platform == "linux":
         if which("iwgetid") is None:
-            print_error("Can't find the 'iwgetid' command\nPlease ensure wifi-tools is installed on your machine.")
+            print_error("Can't find the 'iwgetid' command\nPlease ensure wireless-tools is installed on your machine.")
         
         ssid = run_command("iwgetid -r")
         ssid = ssid.replace("\n", "")

@@ -11,7 +11,7 @@ import re
 import os
 import qrcode
 
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 
 def run_command(command):
     output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True).communicate()
@@ -92,8 +92,8 @@ def generate_qr_code(ssid, password, image=False):
 
 def main():
     parser = argparse.ArgumentParser(usage='%(prog)s [options]')
-    parser.add_argument('--qrcode', "-q", action="store_true", default=False, help="Don't generate a QR code")
-    parser.add_argument('--image', "-i", action="store_true", default=False, help="Create QR code as image instead of showing it on the terminal")
+    parser.add_argument('--qrcode', "-q", action="store_true", default=False, help="Generate a QR code")
+    parser.add_argument('--image', "-i", action="store_true", default=False, help="Create the QR code as image instead of showing it on the terminal (must be used along with --qrcode)")
     parser.add_argument('--ssid', "-s", default=get_ssid(), help="Specify a SSID that you have previously connected to")
     parser.add_argument('--version', action="store_true", help="Show version number")
     args = parser.parse_args()

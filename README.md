@@ -9,6 +9,11 @@ Works on <b>macOS</b> and <b>Linux</b> and <b>Windows</b>
 </p>
 
 ## Installation
+### Requirements
+Linux requires wireless-tools to fucntion. Ensure it is installed on your machine:
+Arch/Manjaro: 'sudo pacman -S wireless_tools'
+Ubuntu: 'sudo apt-get install wireless-tools'
+
 ### Install using `pip`
 ```console
 $ python3 -m pip install --user wifi-password

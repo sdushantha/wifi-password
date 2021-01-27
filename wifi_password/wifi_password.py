@@ -22,7 +22,7 @@ def print_error(text):
     print(f"ERROR: {text}")
     sys.exit(1)
 
-
+# Retrieves the SSID of the currently used wifi network
 def get_ssid():
     if sys.platform == "darwin":
         airport = pathlib.Path("/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport")
@@ -45,7 +45,7 @@ def get_ssid():
 
     return ssid
 
-
+# Gets password for wifi based upon platform
 def get_password(ssid):
     if sys.platform == "darwin":
         password = run_command(f"security find-generic-password -l \"{ssid}\" -D 'AirPort network password' -w")
@@ -64,11 +64,11 @@ def get_password(ssid):
         password = re.findall(r"Key Content\s+:\s(.*)", password)[0]
 
     if password == "":
-        print_error("Cound not find password")
+        print_error("Could not find password")
 
     return password
 
-
+# Creates QR Code based on ssid and password found before
 def generate_qr_code(ssid, password, image=False):
     # Source: https://git.io/JtLIv
     text = f"WIFI:T:WPA;S:{ssid};P:{password};;"

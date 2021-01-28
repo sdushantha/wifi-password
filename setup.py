@@ -5,7 +5,7 @@ with open("README.md", 'r', encoding="utf-8") as f:
 
 setuptools.setup(
     name='wifi-password',
-    version='1.0.5',
+    version='1.0.6',
     author='Siddharth Dushantha',
     author_email='siddharth.dushantha@gmail.com',
     description='Quickly fetch your WiFi password and if needed, generate a QR code of your WiFi to allow phones to easily connect',

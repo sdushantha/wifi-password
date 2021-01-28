@@ -33,6 +33,9 @@ def get_ssid():
         ssid = ssid.replace("\n", "")
 
     elif sys.platform == "linux":
+        if which("nmcli") is None:
+            print_error("Network Manager is required to run this program on Linux.")
+
         ssid = run_command("nmcli -t -f active,ssid dev wifi | egrep '^yes' | cut -d\: -f2")
         ssid = ssid.replace("\n", "")
 

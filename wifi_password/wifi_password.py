@@ -102,6 +102,7 @@ def main():
 
     if args.version:
         print(__version__)
+        sys.exit()
 
     password = get_password(args.ssid)
 

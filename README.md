@@ -32,6 +32,11 @@ $ cd wifi-password
 $ python3 setup.py install
 ```
 
+### Install using the [AUR](https://aur.archlinux.org/packages/wifi-password/)
+```console
+$ sudo pamac build wifi-password
+```
+
 ## Usage
 ```console
 $ wifi-password

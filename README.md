@@ -4,21 +4,11 @@ wifi-password
 <p align="center">
 Quickly fetch your WiFi password and if needed, generate a QR code of your WiFi to allow phones to easily connect.
 <br>
-Works on <b>macOS</b> and <b><del>Linux</b></del> (temporarly removed) and <b>Windows</b>
+Works on <b>macOS</b> and <b>Linux</b> and <b>Windows</b>
 <img src="images/demo.gif" align="center">
 </p>
 
 ## Installation
-### Requirements
-Linux requires wireless-tools to fucntion. Ensure it is installed on your machine:  
-Arch/Manjaro: 
-```console
-$ sudo pacman -Syu wireless_tools
-```
-Ubuntu: 
-```console
-$ sudo apt-get install wireless-tools
-```
 
 ### Install using `pip`
 ```console

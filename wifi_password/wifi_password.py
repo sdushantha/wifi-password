@@ -14,7 +14,9 @@ import qrcode
 __version__ = "1.0.6"
 
 def run_command(command):
-    output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True).communicate()
+    env = os.environ.copy()
+    env["LANG"] = "c" 
+    output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True, env=env).communicate()
     return output.decode("utf-8")
 
 

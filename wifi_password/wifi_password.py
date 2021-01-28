@@ -62,7 +62,7 @@ def get_password(ssid):
         if os.geteuid() != 0:
             print_error(f"You need to run '{sys.argv[0]}' as root")
 
-        password = run_command(f"cat /etc/NetworkManager/system-connections/{ssid}.nmconnection | grep psk=")
+        password = run_command(f"cat '/etc/NetworkManager/system-connections/{ssid}.nmconnection' | grep psk=")
         password = password.replace("\n", "")
         password = password[4:]
 

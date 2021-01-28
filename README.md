@@ -13,7 +13,7 @@ Works on <b>macOS</b> and <b>Linux</b> and <b>Windows</b>
 Linux requires wireless-tools to fucntion. Ensure it is installed on your machine:  
 Arch/Manjaro: 
 ```console
-$ sudo pacman -S wireless_tools
+$ sudo pacman -Syu wireless_tools
 ```
 Ubuntu: 
 ```console

@@ -76,7 +76,7 @@ def get_password(ssid):
     return password
 
 
-def generate_qr_code(ssid, password, image=False):
+def generate_qr_code(ssid, password, image=False, image_dir=None):
     # Source: https://git.io/JtLIv
     text = f"WIFI:T:WPA;S:{ssid};P:{password};;"
 
@@ -88,8 +88,13 @@ def generate_qr_code(ssid, password, image=False):
 
     if image:
         file_name = ssid.replace(" ", "_") + ".png"
+        if image_dir:
+            file_name = os.path.join(image_dir, file_name)
         img = qr.make_image()
-        img.save(file_name)
+        try:
+            img.save(file_name)
+        except Exception:
+            print_error(f"Could not save image to '{image_dir}'")
         print(f"QR code has been saved to {file_name}")
     else:
         qr.make()
@@ -100,6 +105,7 @@ def main():
     parser = argparse.ArgumentParser(usage='%(prog)s [options]')
     parser.add_argument('--qrcode', "-q", action="store_true", default=False, help="Generate a QR code")
     parser.add_argument('--image', "-i", action="store_true", default=False, help="Create the QR code as image instead of showing it on the terminal (must be used along with --qrcode)")
+    parser.add_argument('--image-dir', "-d", help="Specify a directory to save the QR code image to (must be used along with --qrcode and --image)")
     parser.add_argument('--ssid', "-s", default=get_ssid(), help="Specify a SSID that you have previously connected to")
     parser.add_argument('--version', action="store_true", help="Show version number")
     args = parser.parse_args()
@@ -111,7 +117,7 @@ def main():
 
     if args.qrcode:
         args.no_password = True
-        generate_qr_code(args.ssid, password, image=args.image)
+        generate_qr_code(args.ssid, password, image=args.image, image_dir=args.image_dir)
         return
 
     print(password)

@@ -11,7 +11,7 @@ import re
 import os
 import qrcode
 
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 
 def run_command(command):
     output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True).communicate()

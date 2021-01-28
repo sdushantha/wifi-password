@@ -41,12 +41,18 @@ def get_ssid():
 
     elif sys.platform == "win32":
         ssid = run_command("netsh wlan show interfaces | findstr SSID").replace("\r", "")
+        if ssid == "":
+            print_error("SSID was not found")
+        
         ssid = re.findall(r"[^B]SSID\s+:\s(.*)", ssid)[0]
 
     return ssid
 
 
 def get_password(ssid):
+    if ssid == "":
+        print_error("SSID is not defined")
+
     if sys.platform == "darwin":
         password = run_command(f"security find-generic-password -l \"{ssid}\" -D 'AirPort network password' -w")
         password = password.replace("\n", "")
@@ -65,7 +71,7 @@ def get_password(ssid):
         password = re.findall(r"Key Content\s+:\s(.*)", password)[0]
 
     if password == "":
-        print_error("Cound not find password")
+        print_error("Could not find password")
 
     return password
 

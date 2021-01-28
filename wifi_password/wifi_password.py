@@ -32,9 +32,9 @@ def get_ssid():
         ssid = run_command(f"{airport} -I | awk '/ SSID/ {{print substr($0, index($0, $2))}}'")
         ssid = ssid.replace("\n", "")
 
-    elif sys.platform == "linux":
-        ssid = run_command("nmcli -t -f ssid dev wifi")
-        ssid = ssid.replace("\n", "")
+    # elif sys.platform == "linux":
+    #     ssid = run_command("nmcli -t -f ssid dev wifi")
+    #     ssid = ssid.replace("\n", "")
 
     elif sys.platform == "win32":
         ssid = run_command("netsh wlan show interfaces | findstr SSID").replace("\r", "")
@@ -54,10 +54,10 @@ def get_password(ssid):
         password = run_command(f"security find-generic-password -l \"{ssid}\" -D 'AirPort network password' -w")
         password = password.replace("\n", "")
 
-    elif sys.platform == "linux":
-        # Check if the user is running with super user privilages
-        if os.geteuid() != 0:
-            print_error(f"You need to run '{sys.argv[0]}' as root")
+    # elif sys.platform == "linux":
+    #     # Check if the user is running with super user privilages
+    #     if os.geteuid() != 0:
+    #         print_error(f"You need to run '{sys.argv[0]}' as root")
 
         password = run_command(f"nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
         password = password.replace("\n", "")

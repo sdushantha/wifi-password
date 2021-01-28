@@ -4,7 +4,7 @@ wifi-password
 <p align="center">
 Quickly fetch your WiFi password and if needed, generate a QR code of your WiFi to allow phones to easily connect.
 <br>
-Works on <b>macOS</b> and <b>Linux</b> and <b>Windows</b>
+Works on <b>macOS</b> and <b><del>Linux</b></del> (temporarly removed) and <b>Windows</b>
 <img src="images/demo.gif" align="center">
 </p>
 
@@ -30,6 +30,11 @@ $ python3 -m pip install --user wifi-password
 $ git clone https://github.com/sdushantha/wifi-password
 $ cd wifi-password
 $ python3 setup.py install
+```
+
+### Install using the [AUR](https://aur.archlinux.org/packages/wifi-password/)
+```console
+$ sudo pamac build wifi-password
 ```
 
 ## Usage

@@ -11,7 +11,7 @@ import re
 import os
 import qrcode
 
-__version__ = "1.0.3"
+__version__ = "1.0.5"
 
 def run_command(command):
     output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True).communicate()
@@ -32,12 +32,9 @@ def get_ssid():
         ssid = run_command(f"{airport} -I | awk '/ SSID/ {{print substr($0, index($0, $2))}}'")
         ssid = ssid.replace("\n", "")
 
-    elif sys.platform == "linux":
-        if which("iwgetid") is None:
-            print_error("Can't find the 'iwgetid' command\nPlease ensure wireless-tools is installed on your machine.")
-        
-        ssid = run_command("iwgetid -r")
-        ssid = ssid.replace("\n", "")
+    # elif sys.platform == "linux":
+    #     ssid = run_command("nmcli -t -f ssid dev wifi")
+    #     ssid = ssid.replace("\n", "")
 
     elif sys.platform == "win32":
         ssid = run_command("netsh wlan show interfaces | findstr SSID").replace("\r", "")
@@ -57,14 +54,13 @@ def get_password(ssid):
         password = run_command(f"security find-generic-password -l \"{ssid}\" -D 'AirPort network password' -w")
         password = password.replace("\n", "")
 
-    elif sys.platform == "linux":
-        # Check if the user is running with super user privilages
-        if os.geteuid() != 0:
-            print_error(f"You need to run '{sys.argv[0]}' as root")
+    # elif sys.platform == "linux":
+    #     # Check if the user is running with super user privilages
+    #     if os.geteuid() != 0:
+    #         print_error(f"You need to run '{sys.argv[0]}' as root")
 
-        password = run_command(f"cat /etc/NetworkManager/system-connections/{ssid}.nmconnection | grep psk=")
+        password = run_command(f"nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
         password = password.replace("\n", "")
-        password = password[4:]
 
     elif sys.platform == "win32":
         password = run_command(f"netsh wlan show profile name=\"{ssid}\" key=clear | findstr Key").replace("\r", "")
@@ -106,6 +102,7 @@ def main():
 
     if args.version:
         print(__version__)
+        sys.exit()
 
     password = get_password(args.ssid)
 

@@ -43,7 +43,7 @@ def get_ssid():
         ssid = run_command("netsh wlan show interfaces | findstr SSID").replace("\r", "")
         if ssid == "":
             print_error("SSID was not found")
-        
+
         ssid = re.findall(r"[^B]SSID\s+:\s(.*)", ssid)[0]
 
     return ssid

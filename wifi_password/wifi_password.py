@@ -60,9 +60,10 @@ def get_password(ssid):
     elif sys.platform == "linux":
         # Check if the user is running with super user privilages
         if os.geteuid() != 0:
-            print_error(f"You need to run '{sys.argv[0]}' as root")
+            password = run_command(f"sudo nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
+        else:
+            password = run_command(f"nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
 
-        password = run_command(f"nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
         password = password.replace("\n", "")
 
     elif sys.platform == "win32":

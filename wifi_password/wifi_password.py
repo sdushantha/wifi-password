@@ -15,7 +15,7 @@ __version__ = "1.0.7"
 
 def run_command(command):
     output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True).communicate()
-    return output.decode("utf-8")
+    return output.decode("utf-8").rstrip('\r\n')
 
 
 def print_error(text):
@@ -30,17 +30,15 @@ def get_ssid():
             print_error(f"Can't find 'airport' command at {airport}")
 
         ssid = run_command(f"{airport} -I | awk '/ SSID/ {{print substr($0, index($0, $2))}}'")
-        ssid = ssid.replace("\n", "")
 
     elif sys.platform == "linux":
         if which("nmcli") is None:
             print_error("Network Manager is required to run this program on Linux.")
 
         ssid = run_command("nmcli -t -f active,ssid dev wifi | egrep '^yes:' | sed 's/^yes://'")
-        ssid = ssid.replace("\n", "")
 
     elif sys.platform == "win32":
-        ssid = run_command("netsh wlan show interfaces | findstr SSID").replace("\r", "")
+        ssid = run_command("netsh wlan show interfaces | findstr SSID")
         if ssid == "":
             print_error("SSID was not found")
 
@@ -55,7 +53,6 @@ def get_password(ssid):
 
     if sys.platform == "darwin":
         password = run_command(f"security find-generic-password -l \"{ssid}\" -D 'AirPort network password' -w")
-        password = password.replace("\n", "")
 
     elif sys.platform == "linux":
         # Check if the user is running with super user privilages
@@ -64,10 +61,8 @@ def get_password(ssid):
         else:
             password = run_command(f"nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
 
-        password = password.replace("\n", "")
-
     elif sys.platform == "win32":
-        password = run_command(f"netsh wlan show profile name=\"{ssid}\" key=clear | findstr Key").replace("\r", "")
+        password = run_command(f"netsh wlan show profile name=\"{ssid}\" key=clear | findstr Key")
         password = re.findall(r"Key Content\s+:\s(.*)", password)[0]
 
     if password == "":

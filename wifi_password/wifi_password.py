@@ -105,7 +105,7 @@ def main():
     parser = argparse.ArgumentParser(usage='%(prog)s [options]')
     parser.add_argument('--qrcode', "-q", action="store_true", default=False, help="Generate a QR code")
     parser.add_argument('--image', "-i", action="store_true", default=False, help="Create the QR code as image instead of showing it on the terminal (must be used along with --qrcode)")
-    parser.add_argument('--image-dir', "-d", help="Specify a directory to save the QR code image to (must be used along with --qrcode and --image)")
+    parser.add_argument('--path', "-d", help="Specify a directory to save the QR code image to (must be used along with --qrcode and --image)")
     parser.add_argument('--ssid', "-s", default=get_ssid(), help="Specify a SSID that you have previously connected to")
     parser.add_argument('--version', action="store_true", help="Show version number")
     args = parser.parse_args()
@@ -117,7 +117,7 @@ def main():
 
     if args.qrcode:
         args.no_password = True
-        generate_qr_code(args.ssid, password, image=args.image, image_dir=args.image_dir)
+        generate_qr_code(args.ssid, password, image=args.image, image_dir=args.path)
         return
 
     print(password)

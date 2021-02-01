@@ -19,7 +19,7 @@ def run_command(command):
 
 
 def print_error(text):
-    print(f"ERROR: {text}")
+    print(f"ERROR: {text}", file=sys.stderr)
     sys.exit(1)
 
 

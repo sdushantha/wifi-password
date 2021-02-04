@@ -22,7 +22,7 @@ def get_ssid():
     platform = utils.get_platform()
 
     if platform == constants.MAC:
-        airport = pathlib.Path("/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport")
+        airport = pathlib.Path(constants.AIRPORT_PATH)
 
         if not airport.is_file():
             print_error(f"Can't find 'airport' command at {airport}")
@@ -33,10 +33,10 @@ def get_ssid():
         if which("nmcli") is None:
             print_error("Network Manager is required to run this program on Linux.")
 
-        ssid = run_command("nmcli -t -f active,ssid dev wifi | egrep '^yes:' | sed 's/^yes://'")
+        ssid = utils.run_command("nmcli -t -f active,ssid dev wifi | egrep '^yes:' | sed 's/^yes://'")
 
     elif platform == constants.WINDOWS:
-        ssid = run_command("netsh wlan show interfaces | findstr SSID")
+        ssid = utils.run_command("netsh wlan show interfaces | findstr SSID")
 
         if ssid == "":
             print_error("SSID was not found")
@@ -60,16 +60,17 @@ def main():
 
     wifi_list = {}
 
-    if args.ssid:
-        ssid = args.ssid.split(',')
-        wifi_list = utils.generate_wifi_list(ssid)
-        utils.print_wifi_list(wifi_list)
-
     if args.list:
         ssid = utils.get_ssid_list()
         wifi_list = utils.generate_wifi_list(ssid)
         utils.print_wifi_list(wifi_list)
         return
+
+    ssid = get_ssid() if not args.ssid else args.ssid.split(',')
+
+    if ssid:
+        wifi_list = utils.generate_wifi_list(ssid)
+        utils.print_wifi_list(wifi_list)
 
     if args.qrcode:
         args.no_password = True

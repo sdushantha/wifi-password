@@ -12,10 +12,10 @@ import os
 import utils
 import constants
 
-__version__ = "1.0.3"
+__version__ = "1.0.7"
 
 def print_error(text):
-    print(f"ERROR: {text}")
+    print(f"ERROR: {text}", file=sys.stderr)
     sys.exit(1)
 
 def get_ssid():
@@ -23,25 +23,24 @@ def get_ssid():
 
     if platform == constants.MAC:
         airport = pathlib.Path("/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport")
+
         if not airport.is_file():
             print_error(f"Can't find 'airport' command at {airport}")
-
+        
         ssid = utils.run_command(f"{airport} -I | awk '/ SSID/ {{print substr($0, index($0, $2))}}'")
-        ssid = ssid.replace("\n", "")
 
     elif platform == constants.LINUX:
-        if which("iwgetid") is None:
-            print_error("Can't find the 'iwgetid' command\nPlease ensure wireless-tools is installed on your machine.")
-        
-        ssid = utils.run_command("iwgetid -r")
-        ssid = ssid.replace("\n", "")
+        if which("nmcli") is None:
+            print_error("Network Manager is required to run this program on Linux.")
+
+        ssid = run_command("nmcli -t -f active,ssid dev wifi | egrep '^yes:' | sed 's/^yes://'")
 
     elif platform == constants.WINDOWS:
-        ssid = utils.run_command("netsh wlan show interfaces | findstr SSID").replace("\r", "")
+        ssid = run_command("netsh wlan show interfaces | findstr SSID")
 
         if ssid == "":
             print_error("SSID was not found")
-        
+
         ssid = re.findall(r"[^B]SSID\s+:\s(.*)", ssid)[0]
 
     return ssid
@@ -57,6 +56,7 @@ def main():
 
     if args.version:
         print(__version__)
+        sys.exit()
 
     wifi_list = {}
 

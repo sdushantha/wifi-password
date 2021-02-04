@@ -9,16 +9,6 @@ Works on <b>macOS</b> and <b>Linux</b> and <b>Windows</b>
 </p>
 
 ## Installation
-### Requirements
-Linux requires wireless-tools to fucntion. Ensure it is installed on your machine:  
-Arch/Manjaro: 
-```console
-$ sudo pacman -S wireless_tools
-```
-Ubuntu: 
-```console
-$ sudo apt-get install wireless-tools
-```
 
 ### Install using `pip`
 ```console
@@ -30,6 +20,11 @@ $ python3 -m pip install --user wifi-password
 $ git clone https://github.com/sdushantha/wifi-password
 $ cd wifi-password
 $ python3 setup.py install
+```
+
+### Install using the [AUR](https://aur.archlinux.org/packages/wifi-password/)
+```console
+$ sudo pamac build wifi-password
 ```
 
 ## Usage

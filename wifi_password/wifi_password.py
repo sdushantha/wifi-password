@@ -58,27 +58,28 @@ def main():
         print(__version__)
         sys.exit()
 
-    wifi_list = {}
+    wifi_dict = {}
 
     if args.list:
         ssid = utils.get_ssid_list()
-        wifi_list = utils.generate_wifi_list(ssid)
-        utils.print_wifi_list(wifi_list)
+        wifi_dict= utils.generate_wifi_dict(ssid)
+        utils.print_dict(wifi_dict)
         return
 
     ssid = get_ssid() if not args.ssid else args.ssid.split(',')
 
     if ssid:
-        wifi_list = utils.generate_wifi_list(ssid)
-        utils.print_wifi_list(wifi_list)
+        wifi_dict = utils.generate_wifi_dict(ssid)
 
     if args.qrcode:
         args.no_password = True
 
-        for key, value in wifi_list.items():
+        for key, value in wifi_dict.items():
             utils.generate_qr_code(key, value, image=args.image)
         
         return
+
+    utils.print_dict(wifi_dict)
 
 if __name__ == "__main__":
     main()

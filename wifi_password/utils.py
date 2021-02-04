@@ -89,11 +89,11 @@ def get_ssid_list():
 
     return ssid
 
-def generate_wifi_list(profiles: list):
+def generate_wifi_dict(profiles: list):
     """
     Generates a dictionary with the wifi name as key and the password as it's value
     """
-    wifi_list = {}
+    wifi_dict = {}
 
     if profiles is None:
         print(f'List is not defined.')
@@ -106,9 +106,9 @@ def generate_wifi_list(profiles: list):
     for ssid in profiles:
         password = get_password(ssid)
 
-        wifi_list[ssid] = password
+        wifi_dict[ssid] = password
 
-    return wifi_list
+    return wifi_dict
 
 def get_password(ssid: str):
     """
@@ -154,15 +154,17 @@ def run_command(command: str):
     output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True).communicate()
     return output.decode("utf-8")
 
-def print_wifi_list(ssid: dict):
+def print_dict(ssid: dict):
     """
     Prints the contents of the given dictionary that contains the wifi name and password
     """
     if ssid is None:
-        print(f'List is not defined.')
+        print(f'Dictionary is not defined.')
+        return
 
     if len(ssid) == 0:
-        print(f'List is empty.')
+        print(f'Dictionary is empty.')
+        return
 
     print("----------------------------------------------")
     print("{:<30}| {:<}".format("SSID", "Password"))

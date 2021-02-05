@@ -23,71 +23,33 @@ def get_platform():
 
     return platforms[sys.platform]
 
-def get_windows_profiles():
+def get_profiles():
     """
-    Gets a list of names from saved wifi networks in Windows
-
-    Reference: https://www.geeksforgeeks.org/getting-saved-wifi-passwords-using-python/
+    Gets a list of names from saved wifi networks in the current platform
     """
     profiles = []
-
-    try:
-        # getting meta data
-        meta_data = subprocess.check_output(['netsh', 'wlan', 'show', 'profiles'])
-
-        # decoding meta data and splitting data line by line
-        data = meta_data.decode('utf-8', errors='backslashreplace')
-        data = data.split('\n')
-
-        # get meta data for profile names
-        profiles = [d.split(':')[1][1:-1] for d in data if "All User Profile" in d]
-    except subprocess.CalledProcessError:
-        pass
-
-    return profiles
-
-def get_linux_profiles():
-    """
-    Gets a list of names from saved wifi networks in Linux
-    """
-    profiles = []
-
-    try:
-        pass
-    except:
-        pass
-
-    return profiles
-
-def get_mac_profiles():
-    """
-    Gets a list of names from saved wifi networks in MacOS
-    """
-    profiles = []
-
-    try:
-        pass
-    except:
-        pass
-
-    return profiles
-
-def get_ssid_list():
-    """
-    Returns a list of SSIDs
-    """
-    ssid = []
 
     platform = get_platform()
 
-    if platform == constants.MAC:
-        ssid = get_mac_profiles()
-    elif platform == constants.LINUX:
-        ssid = get_linux_profiles()
-    elif platform == constants.WINDOWS:
-        ssid = get_windows_profiles()
+    try:
+        if platform == constants.MAC:
+            pass
+        elif platform == constants.LINUX:
+            pass
+        elif platform == constants.WINDOWS:
+            # Reference: https://www.geeksforgeeks.org/getting-saved-wifi-passwords-using-python/
+            # getting meta data
+            meta_data = run_command('netsh wlan show profiles')
 
-    return ssid
+            # splitting data line by line
+            data = meta_data.split('\n')
+
+            # get meta data for profile names
+            profiles = [d.split(':')[1][1:-1] for d in data if "All User Profile" in d]
+    except Exception as ex:
+        print(f'Error: {ex}')
+
+    return profiles
 
 def generate_wifi_dict(profiles: list):
     """

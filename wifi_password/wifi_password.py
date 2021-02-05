@@ -61,8 +61,8 @@ def main():
     wifi_dict = {}
 
     if args.list:
-        ssid = utils.get_ssid_list()
-        wifi_dict= utils.generate_wifi_dict(ssid)
+        profiles = utils.get_profiles()
+        wifi_dict= utils.generate_wifi_dict(profiles)
         utils.print_dict(wifi_dict)
         return
 

@@ -1,3 +1,11 @@
+# Wifi-password
+wifi-password 레포지토리를 포크하여서 불편사항들을 개선하였습니다
+사실 제가 사용하는데 에러가 나서 수정한겁니다 :D
+
+windows10, python3.9.0 기준으로 패치하였습니다.
+
+---
+
 <h1 align="center">
 wifi-password
 </h1>

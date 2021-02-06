@@ -63,8 +63,10 @@ def get_password(ssid):
 
     elif sys.platform == "win32":
         password = run_command(f"netsh wlan show profile name=\"{ssid}\" key=clear | findstr Key")
-        password = re.findall(r"Key Content\s+:\s(.*)", password)[0]
-
+        try:
+            password = re.findall(r"Key Content\s+:\s(.*)", password)[0]
+        except IndexError:
+            password = ""
     if password == "":
         print_error("Could not find password")
 

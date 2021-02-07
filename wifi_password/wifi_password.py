@@ -67,10 +67,10 @@ def get_password(ssid):
 
     elif sys.platform == "win32":
         lang, _ = locale.getdefaultlocale()
-        key = "키" if lang == "ko_KR" else "Key"
-        password = run_command(f"netsh wlan show profiles name=\"{ssid}\" key=clear | findstr {key}").replace("\r", "")
+        key = ["키", "키 콘텐츠"] if lang == "ko_KR" else ["Key", "Key Contents"]
+        password = run_command(f"netsh wlan show profiles name=\"{ssid}\" key=clear | findstr {key[0]}").replace("\r", "")
         try:
-            password = re.findall(r"키 콘텐츠\s+:\s(.*)", password)[0]
+            password = re.findall(fr"{key[1]}\s+:\s(.*)", password)[0]
         except IndexError:
             password = ""
     if password == "":

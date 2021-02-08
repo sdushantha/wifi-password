@@ -5,7 +5,7 @@ with open("README.md", 'r', encoding="utf-8") as f:
 
 setuptools.setup(
     name='wifi-password',
-    version='1.0.7',
+    version='1.0.9',
     author='Siddharth Dushantha',
     author_email='siddharth.dushantha@gmail.com',
     description='Quickly fetch your WiFi password and if needed, generate a QR code of your WiFi to allow phones to easily connect',
@@ -14,5 +14,5 @@ setuptools.setup(
     url='https://github.com/sdushantha/wifi-password',
     packages=setuptools.find_packages(),
     entry_points={'console_scripts': ['wifi-password = wifi_password.wifi_password:main']},
-    install_requires=['qrcode', 'image'],
+    install_requires=['qrcode', 'image', 'Pillow'],
 )

@@ -45,7 +45,7 @@ def get_profiles():
             data = meta_data.split('\n')
 
             # get meta data for profile names
-            profiles = [d.split(':')[1][1:-1] for d in data if "All User Profile" in d]
+            profiles = [d.split(':')[1][1:] for d in data if "All User Profile" in d]
     except Exception as ex:
         print(f'Error: {ex}')
 
@@ -114,7 +114,7 @@ def run_command(command: str):
         return ""
     
     output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True).communicate()
-    return output.decode("utf-8")
+    return output.decode("utf-8").rstrip('\r\n')
 
 def print_dict(ssid: dict):
     """

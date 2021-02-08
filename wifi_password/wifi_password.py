@@ -12,7 +12,7 @@ import os
 import utils
 import constants
 
-__version__ = "1.0.7"
+__version__ = "1.0.9"
 
 def print_error(text):
     print(f"ERROR: {text}", file=sys.stderr)
@@ -49,7 +49,7 @@ def main():
     parser = argparse.ArgumentParser(usage='%(prog)s [options]')
     parser.add_argument('--qrcode', "-q", action="store_true", default=False, help="Generate a QR code")
     parser.add_argument('--image', "-i", action="store_true", default=False, help="Create the QR code as image instead of showing it on the terminal (must be used along with --qrcode)")
-    parser.add_argument('--ssid', "-s", nargs='?', type=str, help="Specify a SSID that you have previously connected to")
+    parser.add_argument('--ssid', "-s", help="Specify a SSID that you have previously connected to")
     parser.add_argument('--list', "-l", action="store_true", default=False, help="Lists all stored network SSID")
     parser.add_argument('--version', action="store_true", help="Show version number")
     args = parser.parse_args()

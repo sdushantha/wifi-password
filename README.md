@@ -37,6 +37,7 @@ optional arguments:
   --qrcode, -q          Generate a QR code
   --image, -i           Create the QR code as image instead of showing it on the terminal (must be useed along with --qrcode)
   --ssid SSID, -s SSID  Specify a SSID that you have previously connected to
+  --list, -l            Lists all stored network SSID
   --version             Show version number
 ```
 

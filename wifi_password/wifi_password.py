@@ -58,6 +58,9 @@ def main():
         print(__version__)
         sys.exit()
 
+    if args.ssid is None:
+        args.ssid = get_ssid()
+
     wifi_dict = {}
 
     if args.list:

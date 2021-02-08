@@ -87,17 +87,14 @@ def get_password(ssid: str):
     try:
         if platform == constants.MAC:
             password = run_command(f"security find-generic-password -l \"{ssid}\" -D 'AirPort network password' -w")
-            password = password.replace("\n", "")
         elif platform == constants.LINUX:
             # Check if the user is running with super user privilages
             if os.geteuid() != 0:
-                print(f"You need to run the application as root")
+                password = run_command(f"sudo nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
             else:
-                password = run_command(f"cat /etc/NetworkManager/system-connections/{ssid}.nmconnection | grep psk=")
-                password = password.replace("\n", "")
-                password = password[4:]
+                password = run_command(f"nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
         elif platform == constants.WINDOWS:
-            password = run_command(f"netsh wlan show profile name=\"{ssid}\" key=clear | findstr Key").replace("\r", "")
+            password = run_command(f"netsh wlan show profile name=\"{ssid}\" key=clear | findstr Key")
 
             if password != "":
                 password = re.findall(r"Key Content\s+:\s(.*)", password)[0]

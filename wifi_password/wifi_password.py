@@ -58,9 +58,6 @@ def main():
         print(__version__)
         sys.exit()
 
-    if args.ssid is None:
-        args.ssid = get_ssid()
-
     wifi_dict = {}
 
     if args.list:
@@ -68,6 +65,9 @@ def main():
         wifi_dict= utils.generate_wifi_dict(profiles)
         utils.print_dict(wifi_dict)
         return
+
+    if args.ssid is None:
+        args.ssid = get_ssid()
 
     ssid = get_ssid() if not args.ssid else args.ssid.split(',')
 

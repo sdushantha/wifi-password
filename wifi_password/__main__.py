@@ -1,3 +1,3 @@
-from wifi_password import main
+from .wifi_password import main
 
 main()

@@ -14,5 +14,5 @@ setuptools.setup(
     url='https://github.com/sdushantha/wifi-password',
     packages=setuptools.find_packages(),
     entry_points={'console_scripts': ['wifi-password = wifi_password.wifi_password:main']},
-    install_requires=['qrcode', 'image', 'Pillow'],
+    install_requires=['qrcode', 'image', 'Pillow', "colorama"],
 )

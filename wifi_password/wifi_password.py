@@ -10,6 +10,7 @@ from shutil import which
 import re
 import os
 import qrcode
+import colorama
 
 __version__ = "1.0.9"
 
@@ -87,6 +88,9 @@ def generate_qr_code(ssid, password, image=False):
         img.save(file_name)
         print(f"QR code has been saved to {file_name}")
     else:
+        # This will emulate support for ANSI escape sequences, which is needed
+        # in order to display the QR code on Windows
+        colorama.init()
         qr.make()
         qr.print_tty()
 

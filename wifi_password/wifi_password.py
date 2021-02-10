@@ -13,6 +13,7 @@ from wifi_password.const import Docs as constants
 
 __version__ = "1.0.9"
 
+
 def main():
     parser = argparse.ArgumentParser(usage="%(prog)s [options]")
     parser.add_argument(

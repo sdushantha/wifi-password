@@ -14,6 +14,7 @@ def print_error(text):
     print(f"ERROR: {text}")
     sys.exit(1)
 
+
 class Utils:
     @staticmethod
     def get_ssid():
@@ -62,7 +63,7 @@ class Utils:
             return sys.platform
 
         return platforms[sys.platform]
-    
+
     @staticmethod
     def get_profiles():
         """

@@ -221,7 +221,8 @@ class Utils:
                 print(f"QR code has been saved to '{file_name}'.")
             else:
                 import colorama
-
+                # This will emulate support for ANSI escape sequences, which is needed
+                # in order to display the QR code on Windows
                 colorama.init()
                 qr.make()
                 qr.print_tty()

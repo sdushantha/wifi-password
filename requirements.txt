@@ -1,3 +1,4 @@
 qrcode
 Image
 Pillow
+colorama

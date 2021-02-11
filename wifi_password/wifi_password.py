@@ -8,11 +8,7 @@ import argparse
 import re
 import os
 
-from wifi_password.util import Utils as utils
-from wifi_password.const import Docs as constants
-
 __version__ = "1.0.9"
-
 
 def main():
     parser = argparse.ArgumentParser(usage="%(prog)s [options]")

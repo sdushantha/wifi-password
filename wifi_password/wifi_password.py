@@ -94,6 +94,7 @@ def generate_qr_code(ssid, password, image=False):
 
 
 def main():
+    runcommand("chcp 437")
     parser = argparse.ArgumentParser(usage='%(prog)s [options]')
     parser.add_argument('--qrcode', "-q", action="store_true", default=False, help="Generate a QR code")
     parser.add_argument('--image', "-i", action="store_true", default=False, help="Create the QR code as image instead of showing it on the terminal (must be used along with --qrcode)")

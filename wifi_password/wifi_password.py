@@ -17,7 +17,7 @@ def run_command(command):
     env = os.environ.copy()
     env["LANG"] = "C" 
     output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True, env=env).communicate()
-    return output.decode("utf-8")
+    return output.decode("utf-8").rstrip('\r\n')
 
 
 def print_error(text):

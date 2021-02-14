@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
-#
-# by Siddharth Dushantha
-#
+
+"""
+Quickly fetch your WiFi password and if needed, generate a QR code
+of your WiFi to allow phones to easily connect
+
+by Siddharth Dushantha
+"""
+
 import pathlib
 import sys
 import subprocess
@@ -14,19 +19,30 @@ import colorama
 
 __version__ = "1.1.0"
 
-def run_command(command):
+
+def run_command(command: str) -> str:
+    """
+    Runs a given command using subprocess module
+    """
     env = os.environ.copy()
     env["LANG"] = "C"
     output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True, env=env).communicate()
-    return output.decode("utf-8").rstrip('\r\n')
+    return output.decode("utf-8").rstrip("\r\n")
 
 
-def print_error(text):
+def print_error(text) -> None:
+    """
+    Shows an error message and exits the program with the status code 1
+    """
     print(f"ERROR: {text}", file=sys.stderr)
     sys.exit(1)
 
 
-def get_ssid():
+def get_ssid() -> str:
+    """
+    Get the SSID which the computer is currently connected to
+    """
+
     if sys.platform == "darwin":
         airport = pathlib.Path("/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport")
         if not airport.is_file():
@@ -50,7 +66,11 @@ def get_ssid():
     return ssid
 
 
-def get_password(ssid):
+def get_password(ssid: str) -> str:
+    """
+    Gets the password for a given SSID
+    """
+
     if ssid == "":
         print_error("SSID is not defined")
 
@@ -74,7 +94,11 @@ def get_password(ssid):
     return password
 
 
-def generate_qr_code(ssid, password, image=False):
+def generate_qr_code(ssid: str, password: str, path: str, show_qr: bool) -> None:
+    """
+    Generate a QR code based on the given SSID and password
+    """
+
     # Source: https://git.io/JtLIv
     text = f"WIFI:T:WPA;S:{ssid};P:{password};;"
 
@@ -84,38 +108,48 @@ def generate_qr_code(ssid, password, image=False):
                        border=4)
     qr.add_data(text)
 
-    if image:
-        file_name = ssid.replace(" ", "_") + ".png"
-        img = qr.make_image()
-        img.save(file_name)
-        print(f"QR code has been saved to {file_name}")
-    else:
+    if show_qr:
         # This will emulate support for ANSI escape sequences, which is needed
         # in order to display the QR code on Windows
         colorama.init()
         qr.make()
         qr.print_tty()
 
+    if path:
+        file_name = ssid.replace(" ", "_") + ".png"
 
-def main():
+        if path == "STORE_LOCALLY":
+            path = file_name
+
+        try:
+            img = qr.make_image()
+            img.save(path)
+        except FileNotFoundError:
+            print_error(f"No such file/directory: '{path}'")
+
+        print(f"QR code has been saved to {path}")
+
+
+def main() -> None:
     parser = argparse.ArgumentParser(usage="%(prog)s [options]")
-    parser.add_argument("--qrcode", "-q",
-            action="store_true",
-            default=False,
-            help="Generate a QR code")
+    parser.add_argument("--show-qr", "-show",
+                        action="store_true",
+                        default=False,
+                        help="Show a ASCII QR code onto the terminal/console")
 
-    parser.add_argument("--image", "-i",
-            action="store_true",
-            default=False,
-            help="Create the QR code as image instead of showing it on the terminal (must be used along with --qrcode)")
+    parser.add_argument("--save-qr", "-save",
+                        metavar="PATH",
+                        nargs="?",
+                        const="STORE_LOCALLY",
+                        help="Create the QR code and save it as an image")
 
     parser.add_argument("--ssid", "-s",
-            help="Specify a SSID that you have previously connected to")
+                        help="Specify a SSID that you have previously connected to")
 
     parser.add_argument("--version",
-            action="store_true",
-            help="Show version number")
-
+                        action="store_true",
+                        help="Show version number")
+    
     args = parser.parse_args()
 
     if args.version:
@@ -127,11 +161,12 @@ def main():
 
     password = get_password(args.ssid)
 
-    if args.qrcode:
-        generate_qr_code(args.ssid, password, image=args.image)
+    if args.show_qr or args.save_qr:
+        generate_qr_code(ssid=args.ssid, password=password, path=args.save_qr, show_qr=args.show_qr)
         return
 
     print(password)
+
 
 if __name__ == "__main__":
     main()

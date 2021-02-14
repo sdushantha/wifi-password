@@ -17,7 +17,7 @@ import os
 import qrcode
 import colorama
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
 
 def run_command(command: str) -> str:

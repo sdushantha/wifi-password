@@ -39,13 +39,15 @@ def get_profiles():
         elif platform == constants.WINDOWS:
             # Reference: https://www.geeksforgeeks.org/getting-saved-wifi-passwords-using-python/
             # getting meta data
-            meta_data = run_command('netsh wlan show profiles')
+            meta_data = run_command('netsh wlan show profiles | findstr ":"')
 
-            # splitting data line by line
-            data = meta_data.split('\n')
+            if meta_data != "":
+                # splitting data line by line
+                data = meta_data.split('\n')
 
-            # get meta data for profile names
-            profiles = [d.split(':')[1][1:] for d in data if "All User Profile" in d]
+                if len(data) > 0:
+                    # skip the first element in data since it does not contain a valid profile returned by netsh command
+                    profiles = [d.split(':')[1].strip(' .\r') for d in data[1:]]
     except Exception as ex:
         print(f'Error: {ex}')
 
@@ -111,7 +113,7 @@ def run_command(command: str):
         return ""
     
     output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True).communicate()
-    return output.decode("utf-8").rstrip('\r\n')
+    return output.decode("utf-8", errors="replace").rstrip('\r\n')
 
 def print_dict(ssid: dict):
     """

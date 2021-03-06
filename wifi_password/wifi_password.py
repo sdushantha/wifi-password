@@ -23,6 +23,7 @@ __version__ = "1.1.1"
 def run_command(command: str) -> str:
     """
     Runs a given command using subprocess module
+
     """
     env = os.environ.copy()
     env["LANG"] = "C"
@@ -79,7 +80,7 @@ def get_password(ssid: str) -> str:
 
     elif sys.platform == "linux":
         # Check if the user is running with super user privilages
-        if os.geteuid() != 0:
+        if os.getuid() != 0:
             password = run_command(f"sudo nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
         else:
             password = run_command(f"nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
@@ -97,6 +98,7 @@ def get_password(ssid: str) -> str:
 def generate_qr_code(ssid: str, password: str, path: str, show_qr: bool) -> None:
     """
     Generate a QR code based on the given SSID and password
+
     """
 
     # Source: https://git.io/JtLIv
@@ -109,8 +111,10 @@ def generate_qr_code(ssid: str, password: str, path: str, show_qr: bool) -> None
     qr.add_data(text)
 
     if show_qr:
+
         # This will emulate support for ANSI escape sequences, which is needed
         # in order to display the QR code on Windows
+        
         colorama.init()
         qr.make()
         qr.print_tty()

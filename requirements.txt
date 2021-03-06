@@ -1,4 +1,4 @@
-qrcode
-image
-Pillow
-colorama
+qrcode==6.1
+image==1.5.18 # 1.5.33
+Pillow==8.1.0
+colorama==0.4.4

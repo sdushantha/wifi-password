@@ -17,7 +17,7 @@ $ python3 -m pip install --user wifi-password
 
 ### Install using `git`
 ```
-$ git clone https://github.com/sdushantha/wifi-password
+$ git clone https://github.com/jedjdhdnakskfjrjfgggggg/wifi-password.git
 $ cd wifi-password
 $ python3 setup.py install
 ```

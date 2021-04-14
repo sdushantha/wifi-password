@@ -17,14 +17,14 @@ $ python3 -m pip install --user wifi-password
 
 ### Install using `git`
 ```
-$ git clone https://github.com/sdushantha/wifi-password
+$ git clone https://github.com/sdushantha/wifi-pass12
 $ cd wifi-password
 $ python3 setup.py install
 ```
 
 ### Install using the [AUR](https://aur.archlinux.org/packages/wifi-password/)
 ```console
-$ sudo pamac build wifi-password
+$ python2 pamac build wifi-password
 ```
 
 ## Usage

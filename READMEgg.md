@@ -12,19 +12,19 @@ Works on <b>macOS</b> and <b>Linux</b>, <b>Windows</b>
 
 ### Install using `pip`
 ```console
-$ python3 -m pip install --user wifi-password
+$ python3 -m pip install --user wifi-pass
 ```
 
 ### Install using `git`
 ```
-$ git clone https://github.com/jedjdhdnakskfjrjfgggggg/wifi-pas.git
-$ cd wifi-password
+$ git clone https://github.com/jedjdhdnakskfjrjfgggggg/wifi-pass.git
+$ cd wifi-pass
 $ python3 setup.py install
 ```
 
-### Install using the [AUR](https://aur.archlinux.org/packages/wifi-password/)
+### Install using the [AUR](https://aur.archlinux.org/packages/wifi-pass/)
 ```console
-$ python2 pamac build wifi-password
+$ python2 pamac build wifi-pass
 ```
 
 ## Usage

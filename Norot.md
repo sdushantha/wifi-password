@@ -1,8 +1,8 @@
 <h1 align="center">
-wifi-password
+wifi-pass
 </h1>
 <p align="center">
-Quickly fetch your WiFi password and if needed, generate a QR code of your WiFi to allow phones to easily connect.
+Quickly fetch your WiFi pass and if needed, generate a QR code of your WiFi to allow phones to easily connect.
 <br>
 Works on <b>macOS</b> and <b>Linux</b>, <b>Windows</b>
 <img src="images/demo.gif" align="center">
@@ -12,24 +12,26 @@ Works on <b>macOS</b> and <b>Linux</b>, <b>Windows</b>
 
 ### Install using `pip`
 ```console
-$ python3 -m pip install --user wifi-password
+$ python3 -m pip install --user wifi-pass
 ```
 
 ### Install using `git`
 ```
-$ git clone https://github.com/sdushantha/wifi-password
-$ cd wifi-password
+$ git clone https://github.com/sdushantha/wifi-pass.git
+$ cd wifi-pass
 $ python3 setup.py install
 ```
 
-### Install using the [AUR](https://aur.archlinux.org/packages/wifi-password/)
+### Install using the [AUR](https://aur.archlinux.org/packages/wifi-pass/)
 ```console
-$ sudo pamac build wifi-password
+$ python2 pamac build wifi-pass
+
+
 ```
 
 ## Usage
 ```console
-$ wifi-password --help
+$ wifi-pass --help
 usage: wifi_password [options]
 
 optional arguments:
@@ -42,5 +44,5 @@ optional arguments:
 ```
 
 ## Reference
-- This project is an improvement of [wifi-password](https://github.com/rauchg/wifi-password) created by [@rauchg](https://github.com/rauchg), where I have added support for multiple platforms and have added the feature for generating QR codes.
+- This project is an improvement of [wifi-pass](https://github.com/rauchg/wifi-password) created by [@rauchg](https://github.com/rauchg), where I have added support for multiple platforms and have added the feature for generating QR codes.
 - [wifiPassword](https://github.com/ankitjain28may/wifiPassword) created by [@ankitjain28may](https://github.com/ankitjain28may) was frequently used as reference throughout the development of this project.

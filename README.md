@@ -4,7 +4,7 @@ wifi-password
 <p align="center">
 Quickly fetch your WiFi password and if needed, generate a QR code of your WiFi to allow phones to easily connect.
 <br>
-Works on <b>macOS</b> and <b>Linux</b>, <b>Windows</b>
+Works on <b>macOS</b>, <b>Linux</b> and <b>Windows</b>
 <img src="images/demo.gif" align="center">
 </p>
 
@@ -34,6 +34,8 @@ usage: wifi_password [options]
 
 optional arguments:
   -h, --help            show this help message and exit
+  --show-txt, -text     Show a ASCII ssid and password code onto the
+                        terminal/console
   --show-qr, -show      Show a ASCII QR code onto the terminal/console
   --save-qr [PATH], -save [PATH]
                         Create the QR code and save it as an image
@@ -44,3 +46,10 @@ optional arguments:
 ## Reference
 - This project is an improvement of [wifi-password](https://github.com/rauchg/wifi-password) created by [@rauchg](https://github.com/rauchg), where I have added support for multiple platforms and have added the feature for generating QR codes.
 - [wifiPassword](https://github.com/ankitjain28may/wifiPassword) created by [@ankitjain28may](https://github.com/ankitjain28may) was frequently used as reference throughout the development of this project.
+
+## Feature List
+
+(version 1.1.2)
+- Added fixes from the commit from [GoDoVoReZ:feature](https://github.com/GoDoVoReZ/wifi-password/tree/feature)
+- Added support for the Russian language of the system interface and cp866 encoding.
+- Added the ability to display SSID and password in terminal/console

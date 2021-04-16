@@ -5,6 +5,13 @@ Quickly fetch your WiFi password and if needed, generate a QR code
 of your WiFi to allow phones to easily connect
 
 by Siddharth Dushantha
+
+Feature List:
+
+version 1.1.2
+    - Added fixes from the commit from [GoDoVoReZ:feature](https://github.com/GoDoVoReZ/wifi-password/tree/feature)
+    - Added support for the Russian language of the system interface and cp866 encoding
+    - Added the ability to display SSID and password in terminal/console
 """
 
 import pathlib
@@ -17,8 +24,9 @@ import os
 import qrcode
 import colorama
 
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 
+colorama.init(autoreset=True)
 
 def run_command(command: str) -> str:
     """
@@ -26,16 +34,30 @@ def run_command(command: str) -> str:
     """
     env = os.environ.copy()
     env["LANG"] = "C"
-    output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True, env=env).communicate()
-    return output.decode("utf-8").rstrip("\r\n")
+    raw_output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True, env=env).communicate()
+    
+    try:
+        output = raw_output.decode("utf-8").strip("\r\n")
+    except UnicodeDecodeError:
+        # For windows 7
+        output = raw_output.decode("cp866").strip("\r\n")
+
+    return output
 
 
 def print_error(text) -> None:
     """
     Shows an error message and exits the program with the status code 1
     """
-    print(f"ERROR: {text}", file=sys.stderr)
+    print(colorama.Fore.RED + f"ERROR: {text}", file=sys.stderr)
     sys.exit(1)
+
+
+def print_info(text) -> None:
+    """
+    Shows an info message
+    """
+    print(colorama.Fore.MAGENTA + f"INFO: {text}", file=sys.stdout)
 
 
 def get_ssid() -> str:
@@ -57,13 +79,21 @@ def get_ssid() -> str:
         ssid = run_command("nmcli -t -f active,ssid dev wifi | egrep '^yes:' | sed 's/^yes://'")
 
     elif sys.platform == "win32":
-        ssid = run_command("netsh wlan show interfaces | findstr SSID")
-        if ssid == "":
-            print_error("SSID was not found")
+        output = run_command("netsh wlan show interfaces | findstr SSID")
+        if output == "":
+            print_error("error getting SSID")
 
-        ssid = re.findall(r"[^B]SSID\s+:\s(.*)", ssid)[0]
+        result = re.findall(r"[^B]SSID\s+:\s(.*)", output)
 
-    return ssid
+        if len(result) > 0:
+            ssid = result[0]
+        else:
+            ssid = ""
+
+    if ssid == "":
+        print_error("Could not find SSID")
+
+    return ssid.replace("\r", "")
 
 
 def get_password(ssid: str) -> str:
@@ -79,14 +109,23 @@ def get_password(ssid: str) -> str:
 
     elif sys.platform == "linux":
         # Check if the user is running with super user privilages
-        if os.geteuid() != 0:
+        if os.getuid() != 0:
             password = run_command(f"sudo nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
         else:
             password = run_command(f"nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
 
     elif sys.platform == "win32":
-        password = run_command(f"netsh wlan show profile name=\"{ssid}\" key=clear | findstr Key")
-        password = re.findall(r"Key Content\s+:\s(.*)", password)[0]
+        output = run_command(f"netsh wlan show profile name=\"{ssid}\" key=clear")
+        # 
+        result = re.findall(r"Key Content\s+:\s(.*)", output)
+        # if system language russian
+        if result == []:
+            result = re.findall(r"Содержимое ключа\s+:\s(.*)", output)
+
+        if len(result) > 0:
+            password = result[0]
+        else:
+            password = ""
 
     if password == "":
         print_error("Could not find password")
@@ -113,25 +152,33 @@ def generate_qr_code(ssid: str, password: str, path: str, show_qr: bool) -> None
         # in order to display the QR code on Windows
         colorama.init()
         qr.make()
+        print_info('QR CODE:')
         qr.print_tty()
 
     if path:
-        file_name = ssid.replace(" ", "_") + ".png"
+        file_name = ssid.replace(" ", "_")
+        file_name = file_name.replace(".", "_")
 
         if path == "STORE_LOCALLY":
-            path = file_name
+            path = file_name + ".png"
 
         try:
             img = qr.make_image()
             img.save(path)
         except FileNotFoundError:
-            print_error(f"No such file/directory: '{path}'")
+            print_error(f"No such file/directory: {path}")
 
-        print(f"QR code has been saved to {path}")
+        print_info(f"QR code has been saved to: {path}")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(usage="%(prog)s [options]")
+
+    parser.add_argument("--show-txt", "-text",
+                        action="store_true",
+                        default=False,
+                        help="Show a ASCII ssid and password code onto the terminal/console")
+
     parser.add_argument("--show-qr", "-show",
                         action="store_true",
                         default=False,
@@ -153,8 +200,8 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.version:
-        print(__version__)
-        sys.exit()
+        print_info(__version__)
+        sys.exit(0)
 
     if args.ssid is None:
         args.ssid = get_ssid()
@@ -163,9 +210,14 @@ def main() -> None:
 
     if args.show_qr or args.save_qr:
         generate_qr_code(ssid=args.ssid, password=password, path=args.save_qr, show_qr=args.show_qr)
-        return
 
-    print(password)
+    elif args.show_txt:
+        print_info(f'SSID: {args.ssid}\tPASSWORD: {password}')
+  
+    else:
+        print_info(f'SSID: {args.ssid}\tPASSWORD: {password}')  
+    
+    return 0
 
 
 if __name__ == "__main__":

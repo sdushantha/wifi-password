@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
-#
-# by Siddharth Dushantha
-#
+
+"""
+Quickly fetch your WiFi password and if needed, generate a QR code
+of your WiFi to allow phones to easily connect
+
+by Siddharth Dushantha
+"""
+
 import pathlib
 import sys
 import argparse
@@ -12,13 +17,19 @@ import os
 import utils
 import constants
 
-__version__ = "1.0.9"
+__version__ = "1.1.1"
 
-def print_error(text):
+def print_error(text) -> None:
+    """
+    Shows an error message and exits the program with the status code 1
+    """
     print(f"ERROR: {text}", file=sys.stderr)
     sys.exit(1)
 
-def get_ssid():
+def get_ssid() -> str:
+    """
+    Get the SSID which the computer is currently connected to
+    """
     platform = utils.get_platform()
 
     if platform == constants.MAC:
@@ -45,13 +56,31 @@ def get_ssid():
 
     return ssid
 
-def main():
-    parser = argparse.ArgumentParser(usage='%(prog)s [options]')
-    parser.add_argument('--qrcode', "-q", action="store_true", default=False, help="Generate a QR code")
-    parser.add_argument('--image', "-i", action="store_true", default=False, help="Create the QR code as image instead of showing it on the terminal (must be used along with --qrcode)")
-    parser.add_argument('--ssid', "-s", help="Specify a SSID that you have previously connected to")
-    parser.add_argument('--list', "-l", action="store_true", default=False, help="Lists all stored network SSID")
-    parser.add_argument('--version', action="store_true", help="Show version number")
+def main() -> None:
+    parser = argparse.ArgumentParser(usage="%(prog)s [options]")
+    parser.add_argument("--show-qr", "-show",
+                        action="store_true",
+                        default=False,
+                        help="Show a ASCII QR code onto the terminal/console")
+
+    parser.add_argument("--save-qr", "-save",
+                        metavar="PATH",
+                        nargs="?",
+                        const="STORE_LOCALLY",
+                        help="Create the QR code and save it as an image")
+
+    parser.add_argument("--ssid", "-s",
+                        help="Specify a SSID that you have previously connected to")
+
+    parser.add_argument('--list', "-l", 
+                        action="store_true", 
+                        default=False, 
+                        help="Lists all stored network SSID")
+
+    parser.add_argument("--version",
+                        action="store_true",
+                        help="Show version number")
+    
     args = parser.parse_args()
 
     if args.version:
@@ -74,12 +103,9 @@ def main():
     if ssid:
         wifi_dict = utils.generate_wifi_dict(ssid)
 
-    if args.qrcode:
-        args.no_password = True
-
+    if args.show_qr or args.save_qr:
         for key, value in wifi_dict.items():
-            utils.generate_qr_code(key, value, image=args.image)
-        
+            utils.generate_qr_code(ssid=key, password=value, path=args.save_qr, show_qr=args.show_qr)
         return
 
     utils.print_dict(wifi_dict)

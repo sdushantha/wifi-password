@@ -4,10 +4,11 @@ import sys
 import re
 import subprocess
 import qrcode
+import colorama
 
 import constants
 
-def get_platform():
+def get_platform() -> str:
     """
     Returns the name of the platform where the application is currently running
     """
@@ -23,7 +24,7 @@ def get_platform():
 
     return platforms[sys.platform]
 
-def get_profiles():
+def get_profiles() -> list:
     """
     Gets a list of names from saved wifi networks in the current platform
     """
@@ -53,7 +54,7 @@ def get_profiles():
 
     return profiles
 
-def generate_wifi_dict(profiles: list):
+def generate_wifi_dict(profiles: list) -> dict:
     """
     Generates a dictionary with the wifi name as key and the password as it's value
     """
@@ -74,7 +75,7 @@ def generate_wifi_dict(profiles: list):
 
     return wifi_dict
 
-def get_password(ssid: str):
+def get_password(ssid: str) -> str:
     """
     Gets the password for a given SSID
     """
@@ -96,7 +97,7 @@ def get_password(ssid: str):
             else:
                 password = run_command(f"nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
         elif platform == constants.WINDOWS:
-            password = run_command(f"netsh wlan show profile name=\"{ssid}\" key=clear | findstr Key")
+            password = run_command(f"chcp 437 | netsh wlan show profile name=\"{ssid}\" key=clear | findstr Key")
 
             if password != "":
                 password = re.findall(r"Key Content\s+:\s(.*)", password)[0]
@@ -105,17 +106,19 @@ def get_password(ssid: str):
 
     return password
 
-def run_command(command: str):
+def run_command(command: str) -> str:
     """
     Runs a given command using subprocess module
     """
     if command == "" or command is None:
         return ""
     
-    output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True).communicate()
-    return output.decode("utf-8", errors="replace").rstrip('\r\n')
+    env = os.environ.copy()
+    env["LANG"] = "C"
+    output, _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, shell=True, env=env).communicate()
+    return output.decode("utf-8", errors="replace").rstrip("\r\n")
 
-def print_dict(ssid: dict):
+def print_dict(ssid: dict) -> None:
     """
     Prints the contents of the given dictionary that contains the wifi name and password
     """
@@ -136,7 +139,7 @@ def print_dict(ssid: dict):
 
     print("----------------------------------------------")
 
-def generate_qr_code(ssid: str, password: str, image: bool = False):
+def generate_qr_code(ssid: str, password: str, path: str, show_qr: bool) -> None:
     """
     Generates a QR code from a given ssid and password
 
@@ -155,13 +158,26 @@ def generate_qr_code(ssid: str, password: str, image: bool = False):
                         border=4)
         qr.add_data(text)
 
-        if image:
-            file_name = ssid.replace(" ", "_") + ".png"
-            img = qr.make_image()
-            img.save(file_name)
-            print(f"QR code has been saved to '{file_name}'.")
-        else:
+        if show_qr:
+            print(f'---------- {ssid} ----------')
+            # This will emulate support for ANSI escape sequences, which is needed
+            # in order to display the QR code on Windows
+            colorama.init()
             qr.make()
             qr.print_tty()
+
+        if path:
+            file_name = ssid.replace(" ", "_") + ".png"
+
+            if path == "STORE_LOCALLY":
+                path = file_name
+
+            try:
+                img = qr.make_image()
+                img.save(path)
+
+                print(f"QR code has been saved to {path}")
+            except FileNotFoundError:
+                print(f"No such file/directory: '{path}'")
     except Exception as ex:
         print(f'QR Code Error: {ex}')

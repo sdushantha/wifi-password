@@ -1,18 +1,18 @@
 import setuptools
 
-with open("README.md", 'r', encoding="utf-8") as f:
+with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
 
 setuptools.setup(
-    name='wifi-password',
-    version='1.0.9',
-    author='Siddharth Dushantha',
-    author_email='siddharth.dushantha@gmail.com',
-    description='Quickly fetch your WiFi password and if needed, generate a QR code of your WiFi to allow phones to easily connect',
+    name="wifi-password",
+    version="1.1.1",
+    author="Siddharth Dushantha",
+    author_email="siddharth.dushantha@gmail.com",
+    description="Quickly fetch your WiFi password and if needed, generate a QR code of your WiFi to allow phones to easily connect",
     long_description=long_description,
-    long_description_content_type='text/markdown',
-    url='https://github.com/sdushantha/wifi-password',
+    long_description_content_type="text/markdown",
+    url="https://github.com/sdushantha/wifi-password",
     packages=setuptools.find_packages(),
-    entry_points={'console_scripts': ['wifi-password = wifi_password.wifi_password:main']},
-    install_requires=['qrcode', 'image', 'Pillow'],
+    entry_points={"console_scripts": ["wifi-password = wifi_password.wifi_password:main"]},
+    install_requires=["qrcode", "image", "Pillow", "colorama"],
 )

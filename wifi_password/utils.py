@@ -92,7 +92,7 @@ def get_password(ssid: str) -> str:
             password = run_command(f"security find-generic-password -l \"{ssid}\" -D 'AirPort network password' -w")
         elif platform == constants.LINUX:
             # Check if the user is running with super user privilages
-            if os.geteuid() != 0:
+            if os.getuid() != 0:
                 password = run_command(f"sudo nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")
             else:
                 password = run_command(f"nmcli -s -g 802-11-wireless-security.psk connection show '{ssid}'")

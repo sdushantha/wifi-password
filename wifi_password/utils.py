@@ -100,7 +100,12 @@ def get_password(ssid: str) -> str:
             password = run_command(f"chcp 437 | netsh wlan show profile name=\"{ssid}\" key=clear | findstr Key")
 
             if password != "":
-                password = re.findall(r"Key Content\s+:\s(.*)", password)[0]
+                password = re.findall(r"Key Content\s+:\s(.*)", password)
+
+                if len(password) > 0:
+                    password = password[0]
+                else:
+                    password = ""
     except Exception as ex:
         print(f'Error: {ex}')
 

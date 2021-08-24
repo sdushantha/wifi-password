@@ -38,6 +38,33 @@ def print_error(text) -> None:
     sys.exit(1)
 
 
+def get_known_ssids() -> str:
+    """
+    Get the list of all known SSIDs
+    """
+
+    ssids = ""
+
+    if sys.platform == "darwin":
+        ssids = run_command(f"grep -A 1 \"SSIDString\" /Library/Preferences/SystemConfiguration/com.apple.airport.preferences.plist | grep \"string\" | tr -d '\t' | sed -E \"s/[</]*string>//g\" | sort | uniq")
+
+    elif sys.platform == "linux":
+        if os.geteuid() != 0:
+            ssids = run_command(f"sudo sh -c 'for file in /etc/NetworkManager/system-connections/*.nmconnection; do grep ssid \"$file\" | cut -d '=' -f 2; done'")
+        else:
+            ssids = run_command(f"for file in /etc/NetworkManager/system-connections/*.nmconnection; do grep ssid \"$file\" | cut -d '=' -f 2; done")
+
+    elif sys.platform == "win32":
+        for line in run_command("netsh wlan show profile | findstr /c:\"All User Profile\"").splitlines():
+            if "All User Profile" in line:
+                ssids += re.findall(r"[^B]All\sUser\sProfile\s+:\s(.*)", line)[0] + "\n"
+
+    if ssids == "":
+        print_error("No known SSIDs")
+
+    return ssids
+
+
 def get_ssid() -> str:
     """
     Get the SSID which the computer is currently connected to
@@ -149,11 +176,20 @@ def main() -> None:
     parser.add_argument("--version",
                         action="store_true",
                         help="Show version number")
+
+    parser.add_argument("--list-ssid",
+                        action="store_true",
+                        default=False,
+                        help="List all known SSIDs")
     
     args = parser.parse_args()
 
     if args.version:
         print(__version__)
+        sys.exit()
+
+    if args.list_ssid:
+        print(get_known_ssids())
         sys.exit()
 
     if args.ssid is None:

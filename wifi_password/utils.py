@@ -13,6 +13,7 @@ def get_platform() -> str:
     Returns the name of the platform where the application is currently running
     """
     platforms = {
+        'linux': constants.LINUX,
         'linux1': constants.LINUX,
         'linux2': constants.LINUX,
         'darwin': constants.MAC,
@@ -37,7 +38,13 @@ def get_profiles() -> list:
             # Command found here : https://coderwall.com/p/ghl-cg/list-known-wlans
             profiles = run_command(f"defaults read ~/Library/Logs/com.apple.wifi.syncable-networks.plist | grep \" SSID\" | sed 's/^.*= \(.*\);$/\\1/' | sed 's/^\"\\(.*\)\"$/\\1/'").split('\n')
         elif platform == constants.LINUX:
-            pass
+            if os.getuid() != 0:
+                ssid = run_command(f"sudo ls /etc/NetworkManager/system-connections/ | grep .nmconnection").split('\n')
+            else:
+                ssid = run_command(f"ls /etc/NetworkManager/system-connections/ | grep .nmconnection").split('\n')
+            
+            for entry in ssid:
+                profiles.append(entry.split('.nmconnection')[0])
         elif platform == constants.WINDOWS:
             # Reference: https://www.geeksforgeeks.org/getting-saved-wifi-passwords-using-python/
             # getting meta data

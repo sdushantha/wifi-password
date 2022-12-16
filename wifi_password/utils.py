@@ -69,8 +69,6 @@ def generate_wifi_dict(profiles: list) -> dict:
         print(f'List is empty.')
         return
 
-    print(len(profiles))
-
     for ssid in profiles:
         if get_platform() == constants.MAC and len(profiles) > 1:
             password = "*****"

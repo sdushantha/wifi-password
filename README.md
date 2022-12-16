@@ -38,6 +38,7 @@ optional arguments:
   --save-qr [PATH], -save [PATH]
                         Create the QR code and save it as an image
   --ssid SSID, -s SSID  Specify a SSID that you have previously connected to
+  --list, -l            Lists all stored network SSID
   --version             Show version number
 ```
 

@@ -34,7 +34,8 @@ def get_profiles() -> list:
 
     try:
         if platform == constants.MAC:
-            pass
+            # Command found here : https://coderwall.com/p/ghl-cg/list-known-wlans
+            profiles = run_command(f"defaults read ~/Library/Logs/com.apple.wifi.syncable-networks.plist | grep \" SSID\" | sed 's/^.*= \(.*\);$/\\1/' | sed 's/^\"\\(.*\)\"$/\\1/'").split('\n')
         elif platform == constants.LINUX:
             pass
         elif platform == constants.WINDOWS:
@@ -68,9 +69,14 @@ def generate_wifi_dict(profiles: list) -> dict:
         print(f'List is empty.')
         return
 
-    for ssid in profiles:
-        password = get_password(ssid)
+    print(len(profiles))
 
+    for ssid in profiles:
+        if get_platform() == constants.MAC and len(profiles) > 1:
+            password = "*****"
+        else:
+            password = get_password(ssid)
+        
         wifi_dict[ssid] = password
 
     return wifi_dict
@@ -143,6 +149,10 @@ def print_dict(ssid: dict) -> None:
         print("{:<30}| {:<}".format(key, value))
 
     print("----------------------------------------------")
+    # If macOS and list 
+
+    if get_platform() == constants.MAC and len(ssid) > 1:
+        print(f"Use 'wifi-password -s <SSID>' to find a specific WIFI password")
 
 def generate_qr_code(ssid: str, password: str, path: str, show_qr: bool) -> None:
     """

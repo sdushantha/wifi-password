@@ -23,10 +23,17 @@ $ python3 setup.py install
 ```
 
 ### Install using the [AUR](https://aur.archlinux.org/packages/wifi-password/)
+- With `pamac`
 ```console
 $ sudo pamac build wifi-password
 ```
+- With `yay`
+```console
+$ yay -S wifi-password
+```
 
+---
+---
 ## Usage
 ```console
 $ wifi-password --help
@@ -42,6 +49,23 @@ optional arguments:
   --version             Show version number
 ```
 
+---
+---
+## Problems? Check this list
+- ### Password not found:
+  - **Linux:**
+    - Make sure your network passwords are stored correctly in NetworkManager's storage directory. This is in /etc/NetworkManager/system-connections/. NetworkManager can work by checking if the passwords are stored with another program, but you need to store them in this directory for this program to work.
+  - **MacOS/Windows:**
+    - You probably have something broken with your WiFi storage. If not, submit an issue to this repository with information.
+---
+- ### NetworkManager isn't installed:
+  - This program ***does not work*** without NetworkManager on Linux. If you want to use this program, install it using your distributions package manager or software center. Not using NetworkManager is a strange decision, but that's an issue for another time.
+---
+- ### Have another issue?
+  - Open a useful issue on this GitHub, and/or suggest a new item in this list if you find a solution.
+
+---
+---
 ## Reference
 - This project is an improvement of [wifi-password](https://github.com/rauchg/wifi-password) created by [@rauchg](https://github.com/rauchg), where I have added support for multiple platforms and have added the feature for generating QR codes.
 - [wifiPassword](https://github.com/ankitjain28may/wifiPassword) created by [@ankitjain28may](https://github.com/ankitjain28may) was frequently used as reference throughout the development of this project.
